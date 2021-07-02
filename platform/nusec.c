@@ -591,6 +591,7 @@ static HRESULT nusec_reg_read_keychip_id(void *bytes, uint32_t *nbytes)
 {
 	dprintf("Nusec: Read keychip ID\n");
 	dprintf("- Returning keychip ID as %s \n", nusec_cfg.keychip_id);
+	
     return reg_hook_read_bin(
             bytes,
             nbytes,
@@ -613,7 +614,7 @@ static HRESULT nusec_reg_read_model_type(void *bytes, uint32_t *nbytes)
         u32 = 0;
     }
 
-	dprintf("- Emulated model type is %s", c);
+	dprintf("- Emulated model type is %i\n", u32);
     return reg_hook_read_u32(bytes, nbytes, u32);
 }
 
