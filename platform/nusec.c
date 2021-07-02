@@ -578,7 +578,7 @@ static HRESULT nusec_ioctl_put_trace_log_data(struct irp *irp)
 static HRESULT nusec_reg_read_game_id(void *bytes, uint32_t *nbytes)
 {
 	dprintf("Nusec: Read game ID\n");
-	dprintf("- Returning game ID as %s \n", nusec_cfg.game_id);
+	// dprintf("- Returning game ID as %s \n", nusec_cfg.game_id);
 	
     return reg_hook_read_bin(
             bytes,
@@ -590,7 +590,7 @@ static HRESULT nusec_reg_read_game_id(void *bytes, uint32_t *nbytes)
 static HRESULT nusec_reg_read_keychip_id(void *bytes, uint32_t *nbytes)
 {
 	dprintf("Nusec: Read keychip ID\n");
-	dprintf("- Returning keychip ID as %s \n", nusec_cfg.keychip_id);
+	// dprintf("- Returning keychip ID as %s \n", nusec_cfg.keychip_id);
 	
     return reg_hook_read_bin(
             bytes,
