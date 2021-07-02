@@ -13,7 +13,7 @@
 // ...
 #include "platform/platform.h"
 
-struct fatego_hook_config {
+struct chrono_hook_config {
     struct platform_config platform;
     struct amex_config amex;
     struct aime_config aime;
