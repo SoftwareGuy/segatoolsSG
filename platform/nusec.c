@@ -118,6 +118,8 @@ HRESULT nusec_hook_init(
     HRESULT hr;
 
     assert(cfg != NULL);
+	dprintf("Nusec Hook Init: Configuration variable is not null\n");
+	
     assert(game_id != NULL && strlen(game_id) == sizeof(cfg->game_id));
     assert(platform_id != NULL && strlen(platform_id) == sizeof(cfg->platform_id));
 
@@ -129,10 +131,12 @@ HRESULT nusec_hook_init(
 
     if (nusec_cfg.game_id[0] == '\0') {
         memcpy(nusec_cfg.game_id, game_id, sizeof(nusec_cfg.game_id));
+		dprintf("Nusec Hook Init: Emulated game ID: %s\n", game_id); 
     }
 
     if (nusec_cfg.platform_id[0] == '\0') {
         memcpy(nusec_cfg.platform_id, platform_id, sizeof(nusec_cfg.platform_id));
+		dprintf("Nusec Hook Init: Emulated platform ID: %s\n", platform_id); 
     }
 
     nusec_nearfull = 0x00010200;
@@ -259,11 +263,14 @@ static HRESULT nusec_handle_ioctl(struct irp *irp)
 
 static HRESULT nusec_ioctl_ping(struct irp *irp)
 {
+	dprintf("Nusec: Ioctl Ping\n");
     return S_OK;
 }
 
 static HRESULT nusec_ioctl_erase_trace_log(struct irp *irp)
 {
+	dprintf("Nusec: Ioctl Erase Trace Log\n");
+	
     uint32_t count;
     size_t avail;
     HRESULT hr;
@@ -289,6 +296,8 @@ static HRESULT nusec_ioctl_erase_trace_log(struct irp *irp)
 
 static HRESULT nusec_ioctl_add_play_count(struct irp *irp)
 {
+	dprintf("Nusec: Ioctl Add Play Count\n");
+	
     uint32_t delta;
     HRESULT hr;
 
@@ -310,6 +319,8 @@ static HRESULT nusec_ioctl_add_play_count(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_billing_ca_cert(struct irp *irp)
 {
+	dprintf("Nusec: Get Billing CA Certificate\n");
+	
     HANDLE fd;
     HRESULT hr;
 
@@ -359,6 +370,8 @@ static HRESULT nusec_ioctl_get_billing_ca_cert(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_billing_pubkey(struct irp *irp)
 {
+	dprintf("Nusec: Ioctl Get billing pubkey\n");
+	
     HANDLE fd;
     HRESULT hr;
 
@@ -406,6 +419,7 @@ static HRESULT nusec_ioctl_get_billing_pubkey(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_nearfull(struct irp *irp)
 {
+	dprintf("Nusec: Ioctl Get Near Full\n");
     dprintf("Security: %s\n", __func__);
 
     return iobuf_write_le32(&irp->read, nusec_nearfull);
@@ -413,6 +427,8 @@ static HRESULT nusec_ioctl_get_nearfull(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_nvram_available(struct irp *irp)
 {
+	dprintf("Nusec: Get NVRAM Available\n");
+	
     size_t used;
     size_t avail;
 
@@ -428,6 +444,8 @@ static HRESULT nusec_ioctl_get_nvram_available(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_nvram_geometry(struct irp *irp)
 {
+	dprintf("Nusec: Get NVRAM Geometry\n");
+	
     HRESULT hr;
 
     dprintf("Security: %s\n", __func__);
@@ -440,6 +458,7 @@ static HRESULT nusec_ioctl_get_nvram_geometry(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_play_count(struct irp *irp)
 {
+	dprintf("Nusec: Get play count\n");
     dprintf("Security: %s\n", __func__);
 
     return iobuf_write_le32(&irp->read, nusec_play_count);
@@ -447,6 +466,7 @@ static HRESULT nusec_ioctl_get_play_count(struct irp *irp)
 
 static HRESULT nusec_ioctl_get_play_limit(struct irp *irp)
 {
+	dprintf("Nusec: Get play limit\n");
     dprintf("Security: %s\n", __func__);
 
     return iobuf_write_le32(&irp->read, nusec_play_limit);
@@ -557,6 +577,7 @@ static HRESULT nusec_ioctl_put_trace_log_data(struct irp *irp)
 
 static HRESULT nusec_reg_read_game_id(void *bytes, uint32_t *nbytes)
 {
+	dprintf("Nusec: Read game ID\n");
     return reg_hook_read_bin(
             bytes,
             nbytes,
@@ -566,6 +587,7 @@ static HRESULT nusec_reg_read_game_id(void *bytes, uint32_t *nbytes)
 
 static HRESULT nusec_reg_read_keychip_id(void *bytes, uint32_t *nbytes)
 {
+	dprintf("Nusec: Read keychip ID\n");
     return reg_hook_read_bin(
             bytes,
             nbytes,
@@ -575,6 +597,8 @@ static HRESULT nusec_reg_read_keychip_id(void *bytes, uint32_t *nbytes)
 
 static HRESULT nusec_reg_read_model_type(void *bytes, uint32_t *nbytes)
 {
+	dprintf("Nusec: Read model type\n");
+	
     uint32_t u32;
     char c;
 
