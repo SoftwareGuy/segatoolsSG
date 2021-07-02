@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 // Segatools Libraries
+#include "chronohook/config.h"
 #include "platform/platform.h"
 
 #include "board/sg-reader.h"
@@ -18,9 +19,9 @@
 #include "hooklib/serial.h"
 #include "hooklib/spike.h"
 
+#include "util/dprintf.h"
 
 // Statics
-
 static HMODULE chrono_hook_mod;
 static process_entry_t chrono_startup;
 static struct chrono_hook_config chrono_hook_cfg;
@@ -50,7 +51,7 @@ static DWORD CALLBACK chrono_pre_startup(void) {
 	}
 	
 	// AIME and other payment card reader initialization
-	hr = sg_reader_hook_init(&fatego_hook_cfg.aime, AIME_READER_PORT, fatego_hook_mod);
+	hr = sg_reader_hook_init(&chrono_hook_cfg.aime, AIME_READER_PORT, chrono_hook_mod);
 	
 	if(FAILED(hr)) {
 		dprintf("sg reader/aime hook init failure.\n");
@@ -75,9 +76,9 @@ BOOL WINAPI DllMain(HMODULE mod, DWORD cause, void *ctx)
         return TRUE;
     }
 
-    fatego_hook_mod = mod;
+    chrono_hook_mod = mod;
 
-    hr = process_hijack_startup(chrono_pre_startup, &chrono_pre_startup);
+    hr = process_hijack_startup(chrono_pre_startup, &chrono_startup);
 
     if (!SUCCEEDED(hr)) {
         dprintf("Failed to hijack process startup: %x\n", (int) hr);

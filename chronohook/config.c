@@ -12,7 +12,7 @@
 #include "board/sg-reader.h"
 
 #include "hooklib/config.h"
-#include "hooklib/gfx.h"
+// #include "hooklib/gfx.h"
 
 #include "chronohook/config.h"
 
@@ -26,5 +26,5 @@ void chrono_hook_config_load(struct chrono_hook_config *cfg, const wchar_t *file
 		platform_config_load(&cfg->platform, filename);
 		amex_config_load(&cfg->amex, filename);
 		aime_config_load(&cfg->aime, filename);
-		gfx_config_load(&cfg->gfx, filename);
+		// gfx_config_load(&cfg->gfx, filename);
 }

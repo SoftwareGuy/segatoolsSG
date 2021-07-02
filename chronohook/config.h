@@ -17,9 +17,8 @@ struct chrono_hook_config {
     struct platform_config platform;
     struct amex_config amex;
     struct aime_config aime;
-    struct gfx_config gfx;
 };
 
 void chrono_hook_config_load(
-        struct fatego_hook_config *cfg,
+        struct chrono_hook_config *cfg,
         const wchar_t *filename);
