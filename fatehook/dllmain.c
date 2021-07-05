@@ -55,13 +55,10 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	fatego_hook_config_load(&fatego_hook_cfg, L".\\segatools.ini");
 	
 	// Hook APIs.
-	serial_hook_init();
-	
-	// TODO: Control hook init. That'll come later if ever.
-	
-	// Emulation of control hooks would go here...
-	// And here...
-	
+    gfx_hook_init(&fatego_hook_cfg.gfx, fatego_hook_mod);
+    serial_hook_init();
+
+
 	hr = platform_hook_init(&fatego_hook_cfg.platform, 
             "SDEJ", // SDEJ: Fate Grand Order Arcade (ALLS UX)
             "ACA1", /* Check this - it's an ALLS game. */
@@ -73,14 +70,13 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	}
 	
 	// I dunno what VFD is.
-	/*
+	//
 	hr = vfd_hook_init(4);
 
 	if(FAILED(hr)) {
 		dprintf("vfd hook init failure.\n");
 		return hr;
-	}
-	*/
+	}	
 	
 	// AIME and other payment card reader initialization
 	hr = sg_reader_hook_init(&fatego_hook_cfg.aime, AIME_READER_PORT, fatego_hook_mod);
