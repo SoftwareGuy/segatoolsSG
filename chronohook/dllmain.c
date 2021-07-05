@@ -42,7 +42,7 @@ static DWORD CALLBACK chrono_pre_startup(void) {
 	
 	hr = platform_hook_init(&chrono_hook_cfg.platform, 
 		"SDEC", // SDEC: Chrono Regalia
-		"ACA0", // ALLS UX
+		"ACA1", // ALLS UX
 		chrono_hook_mod);
 	
 	if(FAILED(hr)) {

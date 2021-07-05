@@ -52,7 +52,7 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	
 	hr = platform_hook_init(&fatego_hook_cfg.platform, 
             "SDEJ", // SDEJ: Fate Grand Order Arcade (ALLS UX)
-            "ACA0", /* Check this - it's an ALLS game. */
+            "ACA1", /* Check this - it's an ALLS game. */
             fatego_hook_mod);
 	
 	if(FAILED(hr)) {
