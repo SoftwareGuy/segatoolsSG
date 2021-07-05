@@ -19,18 +19,30 @@
 #include "fatehook/config.h"
 #include "fateio/fateio.h"
 
-// IO4 likely not needed?
-
 #include "platform/platform.h"
-
 #include "util/dprintf.h"
-#include "MinHook.h"
+
+// #include "MinHook.h"
 
 static HMODULE fatego_hook_mod;
 static process_entry_t fatego_startup;
 static struct fatego_hook_config fatego_hook_cfg;
 
 static int AIME_READER_PORT = 3;
+
+// IO4 Stuffs
+static HRESULT fate_io4_poll(void *ctx, struct io4_state *state) {
+	// Stubbed; this will require some figuring out.
+	// Help is welcome.
+	
+	// Just return for now.
+	return S_OK;
+};
+
+static const struct io4_ops fate_io4_ops = {
+    .poll = fate_io4_poll,
+};
+// End IO4 Stuffs
 
 static DWORD CALLBACK fatego_pre_startup(void) {
 	HRESULT hr;
@@ -75,6 +87,16 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	
 	if(FAILED(hr)) {
 		dprintf("sg reader/aime hook init failure.\n");
+		return hr;
+	}
+	
+	// IO4 Board Hook Initialization...?
+	// Note: This might not be the right one to use, but this is OK for
+	// an attempt to see if it'll work.
+	hr = io4_hook_init(&fate_io4_ops, fatego_hook_mod);
+	
+	if(FAILED(hr)) {
+		dprintf("IO4 Hook Initialization failed.");
 		return hr;
 	}
 	

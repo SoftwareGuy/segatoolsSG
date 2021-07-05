@@ -9,7 +9,9 @@
 
 #include "amex/amex.h"
 #include "board/sg-reader.h"
-#include "hooklib/dvd.h"
+
+// Probably not required.
+// #include "hooklib/dvd.h"
 
 // ...
 
@@ -20,7 +22,7 @@ struct fatego_hook_config {
     struct amex_config amex;
     struct aime_config aime;
     struct gfx_config gfx;
-	struct dvd_config dvd;	
+	// struct dvd_config dvd;
     // struct fatego_dll_config dll;
     // struct zinput_config zinput;
 };
