@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+// SegaTool includes, board, hook + hooks, fatehook and fate io, then platform.
 #include "board/sg-reader.h"
 #include "board/io4.h"
 #include "board/vfd.h"
@@ -13,6 +14,7 @@
 #include "hook/process.h"
 
 #include "hooklib/gfx.h"
+#include "hooklib/dvd.h"
 #include "hooklib/serial.h"
 #include "hooklib/spike.h"
 
@@ -22,19 +24,21 @@
 #include "platform/platform.h"
 #include "util/dprintf.h"
 
+// No idea.
 // #include "MinHook.h"
 
 static HMODULE fatego_hook_mod;
 static process_entry_t fatego_startup;
 static struct fatego_hook_config fatego_hook_cfg;
 
+// Define some port numbers here that will help us later on.
+// This saves us having to modify the code too deeply.
 static int AIME_READER_PORT = 3;
+static int VFD_COMM_PORT = 4;
 
 // IO4 Stuffs
+// Stubbed; this will require some figuring out. Help is welcome.
 static HRESULT fate_io4_poll(void *ctx, struct io4_state *state) {
-	// Stubbed; this will require some figuring out.
-	// Help is welcome.
-	
 	// Just return for now.
 	return S_OK;
 };
@@ -55,13 +59,18 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	fatego_hook_config_load(&fatego_hook_cfg, L".\\segatools.ini");
 	
 	// Hook APIs.
+	// DVD Hook is important because otherwise you will get an error
+	// from the game if it detects a CD/DVD drive attached to your device.
+	// Something something DVD Drive still attached.
+	
+	serial_hook_init();
+	dvd_hook_init(&fatego_hook_cfg.dvd, fatego_hook_mod);
     gfx_hook_init(&fatego_hook_cfg.gfx, fatego_hook_mod);
-    serial_hook_init();
 
-
+	// Emulation of the ALLS UX system unit platform.
 	hr = platform_hook_init(&fatego_hook_cfg.platform, 
             "SDEJ", // SDEJ: Fate Grand Order Arcade (ALLS UX)
-            "ACA1", /* Check this - it's an ALLS game. */
+            "ACA1", // ALLS UX Generation 1. ACA0 WILL NOT WORK.
             fatego_hook_mod);
 	
 	if(FAILED(hr)) {
@@ -69,12 +78,14 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 		return hr;
 	}
 	
-	// I dunno what VFD is.
-	//
-	hr = vfd_hook_init(4);
+	// VFD apparently is some type of card system?
+	// Hooking this apparently makes the game say
+	// CARD SYSTEM: OK on self-test.
+	// Apparently on COM1 on a real arcade unit?
+	hr = vfd_hook_init(VFD_COMM_PORT);
 
 	if(FAILED(hr)) {
-		dprintf("vfd hook init failure.\n");
+		dprintf("VFD Hook Initialization failure.\n");
 		return hr;
 	}	
 	
@@ -82,7 +93,7 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	hr = sg_reader_hook_init(&fatego_hook_cfg.aime, AIME_READER_PORT, fatego_hook_mod);
 	
 	if(FAILED(hr)) {
-		dprintf("sg reader/aime hook init failure.\n");
+		dprintf("SG Reader/Aime Hook Initialization failed.\n");
 		return hr;
 	}
 	
@@ -106,6 +117,7 @@ static DWORD CALLBACK fatego_pre_startup(void) {
 	return fatego_startup();
 }
 
+// Definition of the DLL hook file itself.
 BOOL WINAPI DllMain(HMODULE mod, DWORD cause, void *ctx)
 {
     HRESULT hr;

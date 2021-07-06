@@ -16,6 +16,7 @@
 #include "hook/process.h"
 
 #include "hooklib/gfx.h"
+#include "hooklib/dvd.h"
 #include "hooklib/serial.h"
 #include "hooklib/spike.h"
 
@@ -25,6 +26,7 @@
 static HMODULE chrono_hook_mod;
 static process_entry_t chrono_startup;
 static struct chrono_hook_config chrono_hook_cfg;
+
 static int AIME_READER_PORT = 3;
 
 static DWORD CALLBACK chrono_pre_startup(void) {
