@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include "amex/amex.h"
+// #include "amex/amex.h"
 #include "amex/config.h"
 
 #include "board/config.h"
@@ -25,7 +25,7 @@ void fatego_hook_config_load(struct fatego_hook_config *cfg, const wchar_t *file
 		assert(filename != NULL);
 		
 		platform_config_load(&cfg->platform, filename);
-		amex_config_load(&cfg->amex, filename);
+		// amex_config_load(&cfg->amex, filename);
 		aime_config_load(&cfg->aime, filename);
 		gfx_config_load(&cfg->gfx, filename);	
 }
